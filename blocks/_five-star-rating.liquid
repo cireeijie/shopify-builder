@@ -1,0 +1,287 @@
+{%- liquid
+  assign rating = block.settings.rating
+
+  if block.settings.dynamic_rating != blank
+    assign rating = block.settings.dynamic_rating
+  endif
+-%}
+
+{%- style -%}
+  #shopify-block-{{ block.id }} {
+    margin: {{ block.settings.margin_top_desktop }}px {{ block.settings.margin_right_desktop }}px {{ block.settings.margin_bottom_desktop }}px {{ block.settings.margin_left_desktop }}px;
+    padding: {{ block.settings.padding_top_desktop }}px {{ block.settings.padding_right_desktop }}px {{ block.settings.padding_bottom_desktop }}px {{ block.settings.padding_left_desktop }}px;
+    {%- if block.settings.custom_width_desktop != blank -%}
+      width: {{ block.settings.custom_width_desktop }}px;
+    {%- elsif block.settings.width_desktop > 0 -%}
+      width: {{ block.settings.width_desktop }}px;
+    {%- endif -%}
+    display: {% if block.settings.visibility_desktop %}block{% else %}none{% endif %};
+  }
+
+  #shopify-block-{{ block.id }} .stars-wrapper {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.stars_spacing }}px;
+  }
+
+  #shopify-block-{{ block.id }} .star-svg {
+    width: {{ block.settings.star_width }}px;
+    height: {{ block.settings.star_width }}px;
+    color: {{ block.settings.star_color }};
+  }
+
+  @media (max-width: 767px) {
+    #shopify-block-{{ block.id }} {
+      margin: {{ block.settings.margin_top_mobile }}px {{ block.settings.margin_right_mobile }}px {{ block.settings.margin_bottom_mobile }}px {{ block.settings.margin_left_mobile }}px;
+      padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_right_mobile }}px {{ block.settings.padding_bottom_mobile }}px {{ block.settings.padding_left_mobile }}px; 
+      {%- if block.settings.custom_width_mobile != blank -%}
+        width: {{ block.settings.custom_width_mobile }}px;
+      {%- elsif block.settings.width_mobile > 0 -%}
+        width: {{ block.settings.width_mobile }}px;
+      {%- endif -%}
+      display: {% if block.settings.visibility_mobile %}block{% else %}none{% endif %};
+    }
+  }
+{%- endstyle -%}
+
+<div class="stars-wrapper">
+  {%- for i in (1..5) -%}
+    {%- liquid
+      assign star_width = 100
+      assign fullstar = false
+      assign target_star_index = 5
+      assign modulo = rating | modulo: 1
+
+      if rating == 5
+        assign fullstar = true
+      else
+        assign target_star_index = rating | ceil
+      endif
+
+      if fullstar
+        assign star_width = 100
+      else
+        if forloop.index == target_star_index and modulo > 0
+          assign star_width = modulo | times: 100
+        elsif forloop.index <= target_star_index
+          assign star_width = 100
+        else
+          assign star_width = 0
+        endif
+      endif
+    -%}
+    <svg class="star-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <mask id="mask0_114_10" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="-1" y="-1" width="20" height="20">
+        <path d="M9.00008 0L11.7811 5.92429L18.0001 6.88013L13.5001 11.489L14.5621 18L9.00008 14.9243L3.43808 18L4.50008 11.489L7.89642e-05 6.88013L6.21908 5.92429L9.00008 0Z" fill="black" stroke="black" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </mask>
+      <g mask="url(#mask0_114_10)">
+        <path d="M9 0L11.781 5.92429L18 6.88013L13.5 11.489L14.562 18L9 14.9243L3.438 18L4.5 11.489L0 6.88013L6.219 5.92429L9 0Z" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect class="star-indicator" width="18" height="18" fill="currentColor" style="width: {{ star_width }}%;"/>
+      </g>
+    </svg>
+  {%- endfor -%}
+</div>
+
+{% schema %}
+  {
+    "name": "5 Star Rating",
+    "class": "five-star-rating-block",
+    "settings": [
+      {
+        "type": "text",
+        "id": "dynamic_rating",
+        "label": "Dynamic Rating"
+      },
+      {
+        "type": "range",
+        "id": "rating",
+        "label": "Rating",
+        "default": 5,
+        "min": 0,
+        "max": 5,
+        "step": 0.1
+      },
+      {
+        "type": "color",
+        "id": "star_color",
+        "label": "star_color",
+        "default": "#fdc702"
+      },
+      {
+        "type": "number",
+        "id": "star_width",
+        "label": "Star Width",
+        "default": 18
+      },
+      {
+        "type": "number",
+        "id": "stars_spacing",
+        "label": "Stars Spacing",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "General Settings"
+      },
+      {
+        "type": "number",
+        "id": "width_desktop",
+        "label": "Width (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "custom_width_desktop",
+        "label": "Custom Width (Desktop)"
+      },
+      {
+        "type": "number",
+        "id": "min_height_desktop",
+        "label": "Minimum Height",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "width_mobile",
+        "label": "Width (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "custom_width_mobile",
+        "label": "Custom Width (Mobile)"
+      },
+      {
+        "type": "number",
+        "id": "min_height_mobile",
+        "label": "Minimum Height",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Margin"
+      },
+      {
+        "type": "number",
+        "id": "margin_top_desktop",
+        "label": "Margin Top (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_bottom_desktop",
+        "label": "Margin Bottom (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_left_desktop",
+        "label": "Margin Left (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_right_desktop",
+        "label": "Margin Right (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_top_mobile",
+        "label": "Margin Top (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_bottom_mobile",
+        "label": "Margin Bottom (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_left_mobile",
+        "label": "Margin Left (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "margin_right_mobile",
+        "label": "Margin Right (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Padding"
+      },
+      {
+        "type": "number",
+        "id": "padding_top_desktop",
+        "label": "Padding Top (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_bottom_desktop",
+        "label": "Padding Bottom (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_left_desktop",
+        "label": "Padding Left (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_right_desktop",
+        "label": "Padding Right (Desktop)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_top_mobile",
+        "label": "Padding Top (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_bottom_mobile",
+        "label": "Padding Bottom (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_left_mobile",
+        "label": "Padding Left (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "number",
+        "id": "padding_right_mobile",
+        "label": "Padding Right (Mobile)",
+        "default": 0
+      },
+      {
+        "type": "header",
+        "content": "Visibility"
+      },
+      {
+        "type": "checkbox",
+        "id": "visibility_desktop",
+        "label": "Show on desktop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "visibility_mobile",
+        "label": "Show on mobile",
+        "default": true
+      }
+    ],
+    "presets": [
+      {
+        "name": "5 Star Rating"
+      }
+    ]
+  }
+{% endschema %}

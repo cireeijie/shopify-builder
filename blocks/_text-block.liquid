@@ -1,0 +1,251 @@
+{%- style -%}
+    #shopify-block-{{ block.id }} {
+      margin: {{ block.settings.margin_top_desktop }}px {{ block.settings.margin_right_desktop }}px {{ block.settings.margin_bottom_desktop }}px {{ block.settings.margin_left_desktop }}px;
+      padding: {{ block.settings.padding_top_desktop }}px {{ block.settings.padding_right_desktop }}px {{ block.settings.padding_bottom_desktop }}px {{ block.settings.padding_left_desktop }}px;
+      {%- if block.settings.width_desktop > 0 -%}
+        width: {{ block.settings.custom_width_desktop }}px;
+      {%- elsif block.settings.custom_width_desktop != blank -%}
+        width: {{ block.settings.custom_width_desktop }};
+      {%- endif -%}
+      text-align: {{ block.settings.text_alignment_desktop }};
+      color: {{ block.settings.text_color }};
+      {%- if block.settings.font_size_desktop > 0 -%}
+        font-size: {{ block.settings.font_size_desktop }}px;
+      {%- endif -%}
+      {%- if block.settings.line_height > 0 -%}
+        line-height: {{ block.settings.line_height }};
+      {%- endif -%}
+    }
+  
+    #shopify-block-{{ block.id }} .text > *:first-child {
+      margin-top: 0;
+    }
+    
+    #shopify-block-{{ block.id }} .text > *:last-child {
+      margin-bottom: 0;
+    }
+  
+    @media (max-width: 767px) {
+      #shopify-block-{{ block.id }} {
+        margin: {{ block.settings.margin_top_mobile }}px {{ block.settings.margin_right_mobile }}px {{ block.settings.margin_bottom_mobile }}px {{ block.settings.margin_left_mobile }}px;
+        padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_right_mobile }}px {{ block.settings.padding_bottom_mobile }}px {{ block.settings.padding_left_mobile }}px; 
+        {%- if block.settings.width_mobile > 0 -%}
+          width: {{ block.settings.custom_width_mobile }}px;
+        {%- elsif block.settings.custom_width_mobile != blank -%}
+          width: {{ block.settings.custom_width_mobile }};
+        {%- endif -%}
+        text-align: {{ block.settings.text_alignment_mobile }};
+        color: {{ block.settings.text_color }};
+        {%- if block.settings.font_size_mobile > 0 -%}
+          font-size: {{ block.settings.font_size_mobile }}px;
+        {%- endif -%}
+      }
+    }
+  {%- endstyle -%}
+  
+  
+  <div class="text">{{ block.settings.text }}</div>
+  
+  {% schema %}
+    {
+      "name": "Text",
+      "class": "text-block",
+      "settings": [
+        {
+          "type": "text_alignment",
+          "id": "text_alignment_desktop",
+          "label": "Text Alignment (Desktop)",
+          "default": "left"
+        },
+        {
+          "type": "text_alignment",
+          "id": "text_alignment_mobile",
+          "label": "Text Alignment (Mobile)",
+          "default": "left"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text block</p>"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color"
+        },
+        {
+          "type": "number",
+          "id": "font_size_desktop",
+          "label": "Font Size (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "font_size_mobile",
+          "label": "Font Size (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "label": "Line height",
+          "default": 0,
+          "min": 0,
+          "max": 10,
+          "step": 0.1
+        },
+        {
+          "type": "header",
+          "content": "General Settings"
+        },
+        {
+          "type": "number",
+          "id": "width_desktop",
+          "label": "Width (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_desktop",
+          "label": "Custom Width (Desktop)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_desktop",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "width_mobile",
+          "label": "Width (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_mobile",
+          "label": "Custom Width (Mobile)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_mobile",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "number",
+          "id": "margin_top_desktop",
+          "label": "Margin Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_desktop",
+          "label": "Margin Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_desktop",
+          "label": "Margin Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_desktop",
+          "label": "Margin Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_top_mobile",
+          "label": "Margin Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_mobile",
+          "label": "Margin Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_mobile",
+          "label": "Margin Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_mobile",
+          "label": "Margin Right (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "number",
+          "id": "padding_top_desktop",
+          "label": "Padding Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_desktop",
+          "label": "Padding Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_desktop",
+          "label": "Padding Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_desktop",
+          "label": "Padding Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_top_mobile",
+          "label": "Padding Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_mobile",
+          "label": "Padding Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_mobile",
+          "label": "Padding Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_mobile",
+          "label": "Padding Right (Mobile)",
+          "default": 0
+        },
+      ],
+      "presets": [
+        {
+          "name": "Text"
+        }
+      ]
+    }
+  {% endschema %}

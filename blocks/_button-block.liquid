@@ -1,0 +1,437 @@
+{%- style -%}
+    #shopify-block-{{ block.id }} {
+      margin: {{ block.settings.margin_top_desktop }}px {{ block.settings.margin_right_desktop }}px {{ block.settings.margin_bottom_desktop }}px {{ block.settings.margin_left_desktop }}px;
+      padding: {{ block.settings.padding_top_desktop }}px {{ block.settings.padding_right_desktop }}px {{ block.settings.padding_bottom_desktop }}px {{ block.settings.padding_left_desktop }}px;
+      {%- if block.settings.width_desktop > 0 -%}
+        width: {{ block.settings.custom_width_desktop }}px;
+      {%- elsif block.settings.custom_width_desktop != blank -%}
+        width: {{ block.settings.custom_width_desktop }};
+      {%- endif -%}
+      display: {% if block.settings.visibility_desktop %}flex{% else %}none{% endif %};
+      justify-content: {{ block.settings.button_alignment_desktop }};
+    }
+  
+    #shopify-block-{{ block.id }} .block-button {
+      border-radius: {{ block.settings.button_radius }}px;
+      background: {{ block.settings.button_color }};
+      color: {{ block.settings.text_color }};
+      {%- if block.settings.button_class == blank -%}
+        {%- if block.settings.custom_button_width_desktop != blank -%}
+          width: {{ block.settings.custom_button_width_desktop }};
+        {%- elsif block.settings.button_width_desktop > 0 -%}
+          width: {{ block.settings.button_width_desktop }}px;
+        {%- endif -%}
+        padding: {{ block.settings.button_top_bottom_padding_desktop }}px {{ block.settings.button_left_right_padding_desktop }}px;
+  
+        {%- if block.settings.font_size_desktop > 0 -%}
+          font-size: {{ block.settings.font_size_desktop }}px;
+        {%- endif -%}
+      {%- endif -%}
+      text-align: center;
+    }
+  
+    #shopify-block-{{ block.id }} .block-button:has(.button-icon) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: {{ block.settings.icon_text_gap }}px;
+    }
+  
+    #shopify-block-{{ block.id }} .block-button .button-icon {
+      width: {{ block.settings.button_icon_size }}px;
+      height: auto;
+    }
+  
+    @media (max-width: 767px) {
+      #shopify-block-{{ block.id }} {
+        margin: {{ block.settings.margin_top_mobile }}px {{ block.settings.margin_right_mobile }}px {{ block.settings.margin_bottom_mobile }}px {{ block.settings.margin_left_mobile }}px;
+        padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_right_mobile }}px {{ block.settings.padding_bottom_mobile }}px {{ block.settings.padding_left_mobile }}px; 
+        {%- if block.settings.width_mobile > 0 -%}
+          width: {{ block.settings.custom_width_mobile }}px;
+        {%- elsif block.settings.custom_width_mobile != blank -%}
+          width: {{ block.settings.custom_width_mobile }};
+        {%- endif -%}
+        display: {% if block.settings.visibility_mobile %}flex{% else %}none{% endif %};
+        justify-content: {{ block.settings.button_alignment_mobile }};
+      }
+  
+      #shopify-block-{{ block.id }} .block-button {
+        {%- if block.settings.button_class == blank -%}
+          {%- if block.settings.custom_button_width_mobile != blank -%}
+            width: {{ block.settings.custom_button_width_mobile }};
+          {%- elsif block.settings.button_width_mobile > 0 -%}
+            width: {{ block.settings.button_width_mobile }}px;
+          {%- endif -%}
+          padding: {{ block.settings.button_top_bottom_padding_mobile }}px {{ block.settings.button_left_right_padding_mobile }}px;
+          border-radius: {{ block.settings.button_radius }}px;
+          background: {{ block.settings.button_color }};
+          color: {{ block.settings.text_color }};
+    
+          {%- if block.settings.font_size_mobile > 0 -%}
+            font-size: {{ block.settings.font_size_mobile }}px;
+          {%- endif -%}
+        {%- endif -%}
+        text-align: center;
+      }
+    }
+  {%- endstyle -%}
+  
+  <a {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% endif %} class="block-button {{ block.settings.button_class }}">
+    {%- if block.settings.button_icon_position == 'left' and block.settings.button_icon -%}
+      {{ block.settings.button_icon | image_url: width: 100 | image_tag: class: 'button-icon' }}
+    {%- endif -%}
+    <span>{{ block.settings.button_text }}</span>
+    {%- if block.settings.button_icon_position == 'right' and block.settings.button_icon -%}
+      {{ block.settings.button_icon | image_url: width: 100 | image_tag: class: 'button-icon' }}
+    {%- endif -%}
+  </a>
+  
+  {% schema %}
+    {
+      "name": "Button",
+      "class": "button-block",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Advance Settings"
+        },
+        {
+          "type": "text",
+          "id": "button_class",
+          "label": "Custom class name",
+          "default": "button button--primary"
+        },
+        {
+          "type": "header",
+          "content": "Block settings"
+        },
+        {
+          "type": "select",
+          "id": "button_alignment_desktop",
+          "label": "Button Alignment (Desktop)",
+          "default": "flex-start",
+          "options": [
+            {
+              "label": "Left",
+              "value": "flex-start"
+            },
+            {
+              "label": "Center",
+              "value": "center"
+            },
+            {
+              "label": "Right",
+              "value": "flex-end"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_alignment_mobile",
+          "label": "Button Alignment (Mobile)",
+          "default": "flex-start",
+          "options": [
+            {
+              "label": "Left",
+              "value": "flex-start"
+            },
+            {
+              "label": "Center",
+              "value": "center"
+            },
+            {
+              "label": "Right",
+              "value": "flex-end"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Button"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "button_icon",
+          "label": "Button Icon"
+        },
+        {
+          "type": "number",
+          "id": "button_icon_size",
+          "label": "Button Icon Size",
+          "default": 24
+        },
+        {
+          "type": "select",
+          "id": "button_icon_position",
+          "label": "Button Icon Position",
+          "default": "right",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ]
+        },
+        {
+          "type": "number",
+          "id": "icon_text_gap",
+          "label": "Icon and Text Gap",
+          "default": 10
+        },
+        {
+          "type": "number",
+          "id": "button_width_desktop",
+          "label": "Button Width (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_button_width_desktop",
+          "label": "Custom Button Width (Desktop)"
+        },
+        {
+          "type": "number",
+          "id": "button_width_mobile",
+          "label": "Button Width (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_button_width_mobile",
+          "label": "Custom Button Width (Mobile)"
+        },
+        {
+          "type": "number",
+          "id": "button_top_bottom_padding_desktop",
+          "label": "Button Top and Bottom Padding (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "button_top_bottom_padding_mobile",
+          "label": "Button Top and Bottom Padding (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "button_left_right_padding_desktop",
+          "label": "Button Left and Right Padding (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "button_left_right_padding_mobile",
+          "label": "Button Left and Right Padding (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "button_radius",
+          "label": "Button Corner Radius",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "color",
+          "id": "button_color",
+          "label": "Button Color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "number",
+          "id": "font_size_desktop",
+          "label": "Font Size (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "font_size_mobile",
+          "label": "Font Size (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "General Settings"
+        },
+        {
+          "type": "number",
+          "id": "width_desktop",
+          "label": "Width (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_desktop",
+          "label": "Custom Width (Desktop)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_desktop",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "width_mobile",
+          "label": "Width (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_mobile",
+          "label": "Custom Width (Mobile)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_mobile",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "number",
+          "id": "margin_top_desktop",
+          "label": "Margin Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_desktop",
+          "label": "Margin Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_desktop",
+          "label": "Margin Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_desktop",
+          "label": "Margin Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_top_mobile",
+          "label": "Margin Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_mobile",
+          "label": "Margin Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_mobile",
+          "label": "Margin Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_mobile",
+          "label": "Margin Right (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "number",
+          "id": "padding_top_desktop",
+          "label": "Padding Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_desktop",
+          "label": "Padding Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_desktop",
+          "label": "Padding Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_desktop",
+          "label": "Padding Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_top_mobile",
+          "label": "Padding Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_mobile",
+          "label": "Padding Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_mobile",
+          "label": "Padding Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_mobile",
+          "label": "Padding Right (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Visibility"
+        },
+        {
+          "type": "checkbox",
+          "id": "visibility_desktop",
+          "label": "Show on desktop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "visibility_mobile",
+          "label": "Show on mobile",
+          "default": true
+        }
+      ],
+      "presets": [
+        {
+          "name": "Button"
+        }
+      ]
+    }
+  {% endschema %}

@@ -1,0 +1,253 @@
+{%- style -%}
+    #shopify-block-{{ block.id }} {
+      margin: {{ block.settings.margin_top_desktop }}px {{ block.settings.margin_right_desktop }}px {{ block.settings.margin_bottom_desktop }}px {{ block.settings.margin_left_desktop }}px;
+      padding: {{ block.settings.padding_top_desktop }}px {{ block.settings.padding_right_desktop }}px {{ block.settings.padding_bottom_desktop }}px {{ block.settings.padding_left_desktop }}px;
+      {%- if block.settings.width_desktop > 0 -%}
+        width: {{ block.settings.width_desktop }}px;
+      {%- elsif block.settings.custom_width_desktop != blank -%}
+        width: {{ block.settings.custom_width_desktop }};
+      {%- endif -%}
+    }
+  
+    {%- if block.settings.equal_slide_height -%}
+      #shopify-block-{{ block.id }} .swiper-wrapper {
+        align-items: stretch;
+      }
+  
+      #shopify-block-{{ block.id }} .swiper-slide {
+        height: auto;
+      }
+    {%- endif -%}
+  
+    {%- if block.settings.show_navigation_arrows -%}
+      #shopify-block-{{ block.id }} {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+  
+      #shopify-block-{{ block.id }} .slider-nav {
+        position: absolute;
+        background: #ffffff;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        box-shadow: 0 0 10px 2px rgba(0,0,0,0.1);
+        cursor: pointer;
+      }
+  
+      #shopify-block-{{ block.id }} .slider-nav.prev {
+        left: 10px;
+      }
+  
+      #shopify-block-{{ block.id }} .slider-nav.next {
+        right: 10px;
+      }
+  
+      #shopify-block-{{ block.id }} .swiper-button-disabled {
+        display: none;
+      }
+    {%- endif -%}
+  
+    @media (max-width: 767px) {
+      #shopify-block-{{ block.id }} {
+        margin: {{ block.settings.margin_top_mobile }}px {{ block.settings.margin_right_mobile }}px {{ block.settings.margin_bottom_mobile }}px {{ block.settings.margin_left_mobile }}px;
+        padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_right_mobile }}px {{ block.settings.padding_bottom_mobile }}px {{ block.settings.padding_left_mobile }}px; 
+        {%- if block.settings.width_mobile > 0 -%}
+          width: {{ block.settings.width_mobile }}px;
+        {%- elsif block.settings.custom_width_mobile != blank -%}
+          width: {{ block.settings.custom_width_mobile }};
+        {%- endif -%}
+      }
+    }
+  {%- endstyle -%}
+  
+  <div class="swiper-wrapper">
+    {%- content_for 'blocks' -%}
+  </div>
+  
+  {%- if block.settings.show_navigation_arrows -%}
+    <div class="slider-nav prev">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+    </div>
+    <div class="slider-nav next">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+  {%- endif -%}
+  
+  {% schema %}
+    {
+      "name": "Slider",
+      "class": "slider slider-block swiper",
+      "blocks": [
+        {
+          "type": "_slide-block"
+        }
+      ],
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_navigation_arrows",
+          "label": "Show navigation arrows",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "equal_slide_height",
+          "label": "Equal Slide Height",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "General Settings"
+        },
+        {
+          "type": "number",
+          "id": "width_desktop",
+          "label": "Width (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_desktop",
+          "label": "Custom Width (Desktop)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_desktop",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "width_mobile",
+          "label": "Width (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_mobile",
+          "label": "Custom Width (Mobile)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_mobile",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "number",
+          "id": "margin_top_desktop",
+          "label": "Margin Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_desktop",
+          "label": "Margin Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_desktop",
+          "label": "Margin Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_desktop",
+          "label": "Margin Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_top_mobile",
+          "label": "Margin Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_mobile",
+          "label": "Margin Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_mobile",
+          "label": "Margin Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_mobile",
+          "label": "Margin Right (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "number",
+          "id": "padding_top_desktop",
+          "label": "Padding Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_desktop",
+          "label": "Padding Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_desktop",
+          "label": "Padding Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_desktop",
+          "label": "Padding Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_top_mobile",
+          "label": "Padding Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_mobile",
+          "label": "Padding Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_mobile",
+          "label": "Padding Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_mobile",
+          "label": "Padding Right (Mobile)",
+          "default": 0
+        },
+      ],
+      "presets": [
+        {
+          "name": "Slider"
+        }
+      ]
+    }
+  {% endschema %}

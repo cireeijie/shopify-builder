@@ -1,0 +1,266 @@
+{%- style -%}
+    #shopify-block-{{ block.id }} {
+      margin: {{ block.settings.margin_top_desktop }}px {{ block.settings.margin_right_desktop }}px {{ block.settings.margin_bottom_desktop }}px {{ block.settings.margin_left_desktop }}px;
+      padding: {{ block.settings.padding_top_desktop }}px {{ block.settings.padding_right_desktop }}px {{ block.settings.padding_bottom_desktop }}px {{ block.settings.padding_left_desktop }}px;
+      {%- if block.settings.custom_width_desktop != blank -%}
+        width: {{ block.settings.custom_width_desktop }}px;
+      {%- elsif block.settings.width_desktop > 0 -%}
+        width: {{ block.settings.width_desktop }}px;
+      {%- endif -%}
+    }
+  
+    #shopify-block-{{ block.id }} .product-price-wrapper {
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  
+    #shopify-block-{{ block.id }} .product-price-wrapper .old-price {
+      font-size: 14px;
+      color: #8b8b8b;
+    }
+  
+    #shopify-block-{{ block.id }} .product-price-wrapper.price-on-sale .current-price {
+      color: #cb3e3e;
+    }
+  
+    #shopify-block-{{ block.id }} .product-price-wrapper .price-badge {
+      font-size: 12px;
+      font-weight: 400;
+      background: #cb3e3e;
+      color: #ffffff;
+      padding: 5px 10px;
+      line-height: 1;
+    }
+  
+    @media (max-width: 767px) {
+      #shopify-block-{{ block.id }} {
+        margin: {{ block.settings.margin_top_mobile }}px {{ block.settings.margin_right_mobile }}px {{ block.settings.margin_bottom_mobile }}px {{ block.settings.margin_left_mobile }}px;
+        padding: {{ block.settings.padding_top_mobile }}px {{ block.settings.padding_right_mobile }}px {{ block.settings.padding_bottom_mobile }}px {{ block.settings.padding_left_mobile }}px; 
+        {%- if block.settings.custom_width_mobile != blank -%}
+          width: {{ block.settings.custom_width_mobile }}px;
+        {%- elsif block.settings.width_mobile > 0 -%}
+          width: {{ block.settings.width_mobile }}px;
+        {%- endif -%}
+      }
+    }
+  {%- endstyle -%}
+  
+  {%- liquid
+    assign compare_at_price = block.settings.product.selected_or_first_available_variant.compare_at_price
+    assign price = block.settings.product.selected_or_first_available_variant.price
+    assign on_sale = false
+  
+    if compare_at_price > price
+      assign on_sale = true
+      assign save_in_percentage = compare_at_price | minus: price | times: 100 | divided_by: compare_at_price | append: '%'
+      assign save_in_money = compare_at_price | minus: price | money
+    endif
+  -%}
+  
+  <div class="product-price-wrapper {% if on_sale %}price-on-sale{% endif %}">
+    {%- if on_sale -%}
+      <s class="old-price">{{ compare_at_price | money }}</s>
+    {%- endif -%}
+    <span class="current-price">{{ price | money }}</span>
+    {%- if on_sale and block.settings.show_save_amount -%}
+      <div class="price-badge {% if block.settings.product.available %}product-on-sale{% else %}product-sold-out{% endif %}">
+        {%- if block.settings.product.available -%}
+          {%- if block.settings.discount_type == 'money' -%}
+            {{ save_in_money }}
+          {%- else -%}
+            {{ save_in_percentage }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'products.product.inventory_out_of_stock' | t }}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+  
+  {% schema %}
+    {
+      "name": "Product Price",
+      "class": "product-price-block",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product Data"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_save_amount",
+          "label": "Show save amount",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "discount_type",
+          "label": "Discount Type",
+          "default": "percentage",
+          "options": [
+            {
+              "label": "Money",
+              "value": "money"
+            },
+            {
+              "label": "Percentage",
+              "value": "percentage"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "General Settings"
+        },
+        {
+          "type": "number",
+          "id": "width_desktop",
+          "label": "Width (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_desktop",
+          "label": "Custom Width (Desktop)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_desktop",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "width_mobile",
+          "label": "Width (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "custom_width_mobile",
+          "label": "Custom Width (Mobile)"
+        },
+        {
+          "type": "number",
+          "id": "min_height_mobile",
+          "label": "Minimum Height",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "number",
+          "id": "margin_top_desktop",
+          "label": "Margin Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_desktop",
+          "label": "Margin Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_desktop",
+          "label": "Margin Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_desktop",
+          "label": "Margin Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_top_mobile",
+          "label": "Margin Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_bottom_mobile",
+          "label": "Margin Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_left_mobile",
+          "label": "Margin Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "margin_right_mobile",
+          "label": "Margin Right (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "number",
+          "id": "padding_top_desktop",
+          "label": "Padding Top (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_desktop",
+          "label": "Padding Bottom (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_desktop",
+          "label": "Padding Left (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_desktop",
+          "label": "Padding Right (Desktop)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_top_mobile",
+          "label": "Padding Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_bottom_mobile",
+          "label": "Padding Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_left_mobile",
+          "label": "Padding Left (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "padding_right_mobile",
+          "label": "Padding Right (Mobile)",
+          "default": 0
+        },
+      ],
+      "presets": [
+        {
+          "name": "Product Price",
+          "settings": {
+            "product": "{{ closest.product }}"
+          }
+        }
+      ]
+    }
+  {% endschema %}
